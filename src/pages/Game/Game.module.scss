@@ -1,0 +1,105 @@
+@use '../../styles/colors.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+.game {
+  width: 100%;
+  max-width: 330px;
+  min-width: 320px;
+  box-sizing: border-box;
+  display: grid;
+  column-gap: 20px;
+  row-gap: 20px;
+  grid-template-columns: 96px 96px 96px;
+  grid-template-rows: 60px 96px 96px 96px 64px;
+  justify-content: center;
+  @include media-tablet {
+    max-width: 768px;
+    column-gap: 20px;
+    row-gap: 20px;
+    grid-template-columns: 140px 140px 140px;
+    grid-template-rows: 52px 140px 140px 140px 72px;
+  }
+
+  .turn {
+    @include display-flex(row, center, center);
+    column-gap: 9px;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    color: $color-silver;
+    box-shadow: inset 0px -4px 0px #10212a;
+    cursor: default;
+    @include font-heading-xs;
+    text-transform: uppercase;
+    background-color: $color-semi-dark-navy;
+
+    @include media-tablet {
+      height: 52px;
+    }
+  }
+
+  .restart {
+    @include display-flex(row, center, center);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    margin-left: auto;
+
+    background-color: #a8bfc9;
+    box-shadow: inset 0px -4px 0px #6b8997;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-silver-hover;
+    }
+
+    img {
+      margin: 0;
+    }
+  }
+
+  .box {
+    width: 100%;
+    height: 100%;
+    background-color: $color-semi-dark-navy;
+    border-radius: 10px;
+    box-shadow: inset 0px -8px 0px #10212a;
+  }
+
+  .points {
+    @include display-flex(row, center, space-between);
+    cursor: default;
+
+    &Container {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      @include display-flex(column, center, center);
+
+      p {
+        margin: 0%;
+        &:first-child {
+          margin-bottom: 2px;
+          @include font-body;
+          font-size: 12px;
+        }
+
+        &:last-child {
+          @include font-heading-s;
+        }
+      }
+
+      &_X {
+        background-color: $color-light-blue;
+      }
+      &_Tie {
+        background-color: $color-silver;
+      }
+      &_O {
+        background-color: $color-light-yellow;
+      }
+    }
+  }
+}
