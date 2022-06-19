@@ -40,7 +40,7 @@
       height: 72px;
       background-color: $color-dark-navy;
       border-radius: 10px;
-      margin-bottom: 17px;
+      margin-bottom: 8px;
       padding: 8px;
       box-sizing: border-box;
       @include display-flex(row, center, center);
@@ -72,7 +72,7 @@
       text-transform: uppercase;
       color: $color-silver-hover;
       opacity: 0.5;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
   }
 

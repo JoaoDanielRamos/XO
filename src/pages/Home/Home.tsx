@@ -2,8 +2,11 @@ import styles from './Home.module.scss';
 import logo from '../../assets/logo.svg';
 import Option from '../../components/Option';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Home() {
+  const [player1, setPlayer1] = useState('X');
+
   return (
     <div className={styles.home}>
       <img className={styles.logo} src={logo} alt='' />
@@ -11,19 +14,33 @@ export default function Home() {
       <div className={styles.playerSelect}>
         <p className={styles.playerSelect_title}>pick player 1's mark</p>
         <div className={styles.playerSelect_options}>
-          <div className={`${styles.optionBox} ${styles.optionBox__selected}`}>
+          <div
+            className={`${styles.optionBox} ${
+              player1 === 'X' ? styles.optionBox__selected : ''
+            }`}
+            onClick={() => {
+              setPlayer1('X');
+            }}
+          >
             <Option
               option='X'
-              color='dark navy'
+              color={player1 === 'X' ? 'dark navy' : 'silver'}
               size={32}
               cssClass={styles.option}
             />
           </div>
 
-          <div className={styles.optionBox}>
+          <div
+            className={`${styles.optionBox}  ${
+              player1 === 'O' ? styles.optionBox__selected : ''
+            }`}
+            onClick={() => {
+              setPlayer1('O');
+            }}
+          >
             <Option
               option='O'
-              color='silver'
+              color={player1 === 'O' ? 'dark navy' : 'silver'}
               size={32}
               cssClass={styles.option}
             />
@@ -38,6 +55,7 @@ export default function Home() {
       >
         new game (vs cpu)
       </Link>
+
       <Link
         className={`${styles.button} ${styles.button__blue}`}
         to='versus/player'
