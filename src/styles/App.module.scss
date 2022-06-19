@@ -1,0 +1,15 @@
+@use './colors.scss' as *;
+@use './mixins.scss' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;700&display=swap');
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+  background-color: $color-dark-navy;
+  font-family: 'Outfit', sans-serif;
+
+  @include display-flex(row, center, center);
+}
