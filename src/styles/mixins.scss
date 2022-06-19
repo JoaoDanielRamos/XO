@@ -1,3 +1,4 @@
+// Media Queries
 @mixin media-tablet {
   @media only screen and (min-width: 768px) {
     @content;
@@ -10,9 +11,41 @@
   }
 }
 
+// Flex Display
 @mixin display-flex($direction, $align-items, $justify-content) {
   display: flex;
   flex-direction: $direction;
   align-items: $align-items;
   justify-content: $justify-content;
+}
+
+// Typography
+@mixin font-heading-l {
+  font-size: 40px;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+}
+
+@mixin font-heading-m {
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+@mixin font-heading-s {
+  font-size: 20px;
+  letter-spacing: 1.25px;
+  font-weight: 700;
+}
+
+@mixin font-heading-xs {
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+@mixin font-body {
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  font-weight: 500;
 }
