@@ -7,30 +7,35 @@ import restart from '../../assets/icon-restart.svg';
 import iconXOutline from '../../assets/icon-x-outline.svg';
 import iconOOutline from '../../assets/icon-o-outline.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { changeTurns } from '../../features/player';
-import { pickATile } from '../../features/player';
+import {
+  changeTurns,
+  pickATile,
+  updatePlays,
+  checkForWin,
+} from '../../features/player';
+import { useEffect } from 'react';
 
 export default function Game() {
+  const dispatch = useAppDispatch();
+
   let player1 = useAppSelector(state => state.game.value.playerOne);
   let player2 = useAppSelector(state => state.game.value.playerTwo);
   const gamePicks = useAppSelector(state => state.game.value.tiles);
-  const dispatch = useAppDispatch();
 
   let activePlayer: any = [player1, player2].find(
     player => player.turn === 'active'
   );
 
-  let definePlayers = (player: any) => {
-    if (player.mark === 'X') {
-      return 'P1';
-    } else {
-      return 'P2';
-    }
-  };
+  useEffect(() => {
+    dispatch(checkForWin([player1.plays, player2.plays]));
+
+    return () => {};
+  }, [player1.plays, player2.plays]);
 
   const handleClick = (event: any) => {
     const target = event.target as HTMLTextAreaElement;
     dispatch(pickATile([target.id, activePlayer.mark]));
+    dispatch(updatePlays(target.id));
     dispatch(changeTurns('active'));
   };
 
@@ -70,9 +75,12 @@ export default function Game() {
         <img src={restart} alt='' />
       </button>
 
-      {gamePicks.map((item, index) => (
+      {gamePicks.map((item: any, index) => (
         <div
-          className={styles.box}
+          key={index}
+          className={`${styles.box} ${
+            item.winner === 'X' ? styles.box_winnerX : ''
+          } ${item.winner === 'O' ? styles.box_winnerO : ''}`}
           id={`${item.position}`}
           onMouseEnter={event => handleMouseOn(item.filled, event)}
           onMouseOut={event => {
@@ -84,14 +92,14 @@ export default function Game() {
           {item.filled === 'X' ? (
             <Option
               option='X'
-              color={'blue'}
+              color={`${item.winner === 'X' ? 'dark navy' : 'blue'}`}
               size={64}
               cssClass={styles.option}
             />
           ) : item.filled === 'O' ? (
             <Option
               option='O'
-              color={'yellow'}
+              color={`${item.winner === 'O' ? 'dark navy' : 'yellow'}`}
               size={66}
               cssClass={styles.option}
             />
@@ -102,7 +110,7 @@ export default function Game() {
       ))}
 
       <div className={`${styles.pointsContainer} ${styles.pointsContainer_X}`}>
-        <p>X {`(${definePlayers(player1)})`}</p>
+        <p>X {`${player1.mark === 'X' ? '(P1)' : '(P2)'}`}</p>
         <p>0</p>
       </div>
 
@@ -114,7 +122,7 @@ export default function Game() {
       </div>
 
       <div className={`${styles.pointsContainer} ${styles.pointsContainer_O}`}>
-        <p>O {`(${definePlayers(player2)})`}</p>
+        <p>O {`${player1.mark === 'X' ? '(P2)' : '(P1)'}`}</p>
         <p>0</p>
       </div>
     </div>

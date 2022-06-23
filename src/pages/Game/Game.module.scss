@@ -74,6 +74,14 @@
     background-position-x: 50%;
     background-position-y: 50%;
 
+    &_winnerO {
+      background-color: $color-light-yellow;
+    }
+
+    &_winnerX {
+      background-color: $color-light-blue;
+    }
+
     @include display-flex(row, center, center);
   }
 
