@@ -2,10 +2,13 @@ import styles from './Home.module.scss';
 import logo from '../../assets/logo.svg';
 import Option from '../../components/Option';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { pickAMark } from '../../features/player';
 
 export default function Home() {
-  const [player1, setPlayer1] = useState('X');
+  const player1 = useAppSelector(state => state.game.value.playerOne.mark);
+
+  const dispatch = useAppDispatch();
 
   return (
     <div className={styles.home}>
@@ -19,7 +22,7 @@ export default function Home() {
               player1 === 'X' ? styles.optionBox__selected : ''
             }`}
             onClick={() => {
-              setPlayer1('X');
+              dispatch(pickAMark('X'));
             }}
           >
             <Option
@@ -35,7 +38,7 @@ export default function Home() {
               player1 === 'O' ? styles.optionBox__selected : ''
             }`}
             onClick={() => {
-              setPlayer1('O');
+              dispatch(pickAMark('O'));
             }}
           >
             <Option
