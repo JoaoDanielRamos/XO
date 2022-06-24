@@ -13,7 +13,7 @@ import {
   updatePlays,
   checkForWin,
 } from '../../features/player';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Game() {
   const dispatch = useAppDispatch();
@@ -26,16 +26,13 @@ export default function Game() {
     player => player.turn === 'active'
   );
 
-  useEffect(() => {
-    dispatch(checkForWin([player1.plays, player2.plays]));
-
-    return () => {};
-  }, [player1.plays, player2.plays]);
+  useEffect(() => {}, [player1.wins, player2.wins]);
 
   const handleClick = (event: any) => {
     const target = event.target as HTMLTextAreaElement;
     dispatch(pickATile([target.id, activePlayer.mark]));
     dispatch(updatePlays(target.id));
+    dispatch(checkForWin([player1, player2]));
     dispatch(changeTurns('active'));
   };
 
@@ -111,7 +108,7 @@ export default function Game() {
 
       <div className={`${styles.pointsContainer} ${styles.pointsContainer_X}`}>
         <p>X {`${player1.mark === 'X' ? '(P1)' : '(P2)'}`}</p>
-        <p>0</p>
+        <p>{`${player1.wins}`}</p>
       </div>
 
       <div
@@ -123,7 +120,7 @@ export default function Game() {
 
       <div className={`${styles.pointsContainer} ${styles.pointsContainer_O}`}>
         <p>O {`${player1.mark === 'X' ? '(P2)' : '(P1)'}`}</p>
-        <p>0</p>
+        <p>{`${player2.wins}`}</p>
       </div>
     </div>
   );

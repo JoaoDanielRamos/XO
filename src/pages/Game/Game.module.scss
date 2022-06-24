@@ -76,10 +76,12 @@
 
     &_winnerO {
       background-color: $color-light-yellow;
+      box-shadow: inset 0px -8px 0px #c39900;
     }
 
     &_winnerX {
       background-color: $color-light-blue;
+      box-shadow: inset 0px -8px 0px #00acaa;
     }
 
     @include display-flex(row, center, center);
@@ -130,5 +132,11 @@
         background-color: $color-light-yellow;
       }
     }
+  }
+}
+
+.cpu {
+  h1 {
+    color: $color-light-yellow;
   }
 }

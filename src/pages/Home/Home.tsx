@@ -54,16 +54,16 @@ export default function Home() {
 
       <Link
         className={`${styles.button} ${styles.button__yellow}`}
-        to='versus/cpu'
+        to='versus/player'
       >
-        new game (vs cpu)
+        new game (vs player)
       </Link>
 
       <Link
         className={`${styles.button} ${styles.button__blue}`}
-        to='versus/player'
+        to='versus/cpu'
       >
-        new game (vs player)
+        ⚠️ new game (vs cpu)
       </Link>
     </div>
   );

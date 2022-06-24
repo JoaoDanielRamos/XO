@@ -1,5 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const winningTiles = [
+  // horizontal
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  // vertical
+  [1, 4, 7],
+  [2, 5, 8],
+  [3, 6, 9],
+  // diagonal
+  [1, 5, 9],
+  [3, 5, 7],
+];
+
 export const gameSlice = createSlice({
   name: 'game',
   initialState: {
@@ -7,14 +21,16 @@ export const gameSlice = createSlice({
       playerOne: {
         name: 'P1',
         mark: 'X',
-        plays: [],
         turn: 'active',
+        plays: [],
+        wins: 0,
       },
       playerTwo: {
         name: 'P2',
         mark: 'O',
-        plays: [],
         turn: '',
+        plays: [],
+        wins: 0,
       },
       tiles: [
         {
@@ -54,7 +70,6 @@ export const gameSlice = createSlice({
           filled: '',
         },
       ],
-      cpu: {},
     },
   },
   reducers: {
@@ -72,6 +87,14 @@ export const gameSlice = createSlice({
       }
     },
 
+    pickATile: (state: { value: any }, action: { payload: any }) => {
+      let pick: any = state.value.tiles.find(
+        (item: any) => String(item.position) === action.payload[0]
+      );
+      let index = state.value.tiles.indexOf(pick);
+      state.value.tiles[index].filled = action.payload[1];
+    },
+
     changeTurns: (state: { value: any }, action: { payload: any }) => {
       if (state.value.playerTwo.turn === action.payload) {
         state.value.playerOne.turn = action.payload;
@@ -80,14 +103,6 @@ export const gameSlice = createSlice({
         state.value.playerTwo.turn = action.payload;
         state.value.playerOne.turn = '';
       }
-    },
-
-    pickATile: (state: { value: any }, action: { payload: any }) => {
-      let pick: any = state.value.tiles.find(
-        (item: any) => String(item.position) === action.payload[0]
-      );
-      let index = state.value.tiles.indexOf(pick);
-      state.value.tiles[index].filled = action.payload[1];
     },
 
     updatePlays: (state: { value: any }, action: { payload: any }) => {
@@ -99,90 +114,48 @@ export const gameSlice = createSlice({
     },
 
     checkForWin: (state: { value: any }, action: { payload: any }) => {
-      let player1Plays: any = [...action.payload[0]];
-      let player2Plays: any = [...action.payload[1]];
+      let playerOne: any = action.payload[0];
+      let playerTwo: any = action.payload[1];
+      let gameTiles: any = state.value.tiles;
+      let winner: any = undefined;
 
-      const winningTiles = [
-        // horizontal
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-        // vertical
-        [1, 4, 7],
-        [2, 5, 8],
-        [3, 6, 9],
-        // diagonal
-        [1, 5, 9],
-        [3, 5, 7],
-      ];
+      const checker = (player: any) => {
+        winningTiles.forEach(winningMove => {
+          let counter: any = 0;
+          let winArr: any = [];
 
-      // Check P1
-      winningTiles.forEach(winningMove => {
-        // create a counter that will be increased by one everytime a player's play
-        // includes a winning move
-        let counter = 0;
+          player.plays.forEach((play: any) => {
+            // Loop over winning moves and check if includes any player plays
+            if (winningMove.includes(play)) {
+              // increase the counter
+              counter++;
 
-        // create an empty array that will receive the winning move once the counter reaches 3
-        let winArr: any = [];
-
-        // Loop over player's plays array
-        player1Plays.forEach((play: any) => {
-          // Loop over winning moves and check if includes any player plays
-          if (winningMove.includes(play)) {
-            // increase the counter
-            counter++;
-            if (counter === 3) {
-              // push the winning move to the win array
-              winArr.push(...winningMove);
+              if (counter === 3) {
+                // push the winning move to the win array
+                winArr.push(...winningMove);
+              }
             }
-          }
-        });
+          });
 
-        if (counter === 3) {
-          state.value.tiles.forEach((tile: any) => {
-            console.log(winArr);
+          gameTiles.forEach((tile: any) => {
             winArr.forEach((move: number) => {
               if (tile.position === move) {
-                tile.winner = 'X';
+                tile.winner = player.mark;
+                winner = player.name;
               }
             });
           });
-        }
-      });
-
-      // Check P2
-      winningTiles.forEach(winningMove => {
-        // create a counter that will be increased by one everytime a player's play
-        // includes a winning move
-        let counter = 0;
-
-        // create an empty array that will receive the winning move once the counter reaches 3
-        let winArr: any = [];
-
-        // Loop over player's plays array
-        player2Plays.forEach((play: any) => {
-          // Loop over winning moves and check if includes any player plays
-          if (winningMove.includes(play)) {
-            // increase the counter
-            counter++;
-            if (counter === 3) {
-              // push the winning move to the win array
-              winArr.push(...winningMove);
-            }
-          }
         });
+      };
 
-        if (counter === 3) {
-          state.value.tiles.forEach((tile: any) => {
-            console.log(winArr);
-            winArr.forEach((move: number) => {
-              if (tile.position === move) {
-                tile.winner = 'O';
-              }
-            });
-          });
-        }
-      });
+      checker(playerOne);
+      checker(playerTwo);
+
+      if (winner) {
+        [state.value.playerOne, state.value.playerTwo].find(
+          player => player.name === winner
+        ).wins++;
+      }
     },
   },
 });
